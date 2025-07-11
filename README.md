@@ -1,27 +1,63 @@
-# Coarse-Grained-WSD 
-*Transformer & POS-Augmented Word Sense Disambiguation*
+# Coarse-Grained Word Sense Disambiguation
+
+A transformer-based WSD system that clusters WordNet senses into coarse‐grained homonymy groups and augments BERT with part-of-speech embeddings to accurately resolve word meanings.
 
 ---
 
-## 🔍 Overview  
-This project implements a **coarse-grained Word Sense Disambiguation** system on the NLP2023 dataset. We cluster WordNet senses into homonymy groups and fine-tune a BERT model augmented with POS-tag embeddings to predict the correct sense group for each target word.
+## Table of Contents
+
+- [Project Overview](#project-overview)  
+- [Objectives](#objectives)  
+- [Dataset](#dataset)  
+- [Methodology](#methodology)  
+  - [Sense Clustering](#sense-clustering)  
+  - [Model Architecture](#model-architecture)  
+  - [POS-Tag Augmentation](#pos-tag-augmentation)  
+- [Installation](#installation)  
+- [Usage](#usage)  
+- [Results](#results)  
+- [Directory Structure](#directory-structure)  
+- [References](#references)  
 
 ---
 
-## 📦 Features  
-- **Homonymy Clustering**: Groups WordNet synsets into coarse-grained sense clusters.  
-- **Transformer Backbone**: Fine-tunes a pre-trained BERT base model.  
-- **POS Augmentation**: Concatenates POS-tag embeddings to the token embeddings before the classification head.  
-- **End-to-End Pipeline**: From data preprocessing through model training to evaluation and inference.
+## Project Overview
 
----
+This repository implements a **coarse-grained Word Sense Disambiguation** system for the NLP2023 shared task. By grouping fine-grained WordNet synsets into broader homonymy clusters, and by enriching a pre-trained BERT model with POS-tag embeddings, we achieve robust disambiguation performance on ambiguous English words.
 
-## 🗄️ Dataset  
-- **Format**: JSONL files with one example per line:  
-  ```json
-  {
-    "sentence": "The bank raised interest rates.",
-    "target_word": "bank",
-    "pos": "NOUN",
-    "gold_cluster": 3
-  }
+## Objectives
+
+1. **Sense Clustering**  
+   - Aggregate WordNet synsets into coarse-grained homonymy groups to simplify the classification task and reduce label sparsity.  
+2. **Transformer Fine-Tuning**  
+   - Leverage a pre-trained BERT base model to encode sentence context and predict the correct coarse sense cluster.  
+3. **POS-Tag Augmentation**  
+   - Integrate part-of-speech information via dedicated embeddings to improve disambiguation of syntactically ambiguous tokens.  
+
+## Dataset
+
+- **NLP2023 WSD Task Dataset**  
+  - English sentences annotated with WordNet sense keys.  
+  - Train / Validation / Test splits provided by the shared task organizers.  
+- **WordNet 3.0**  
+  - Source of synset definitions and part-of-speech information.  
+
+## Methodology
+
+### Sense Clustering
+
+1. **Extract** all synsets referenced in the training data.  
+2. **Group** synsets sharing the same lemma and part-of-speech into a single coarse-grained class.  
+3. **Assign** each annotated instance to its corresponding coarse-grained cluster.
+
+### Model Architecture
+
+- **Base Encoder**: `bert-base-uncased` from Hugging Face Transformers.  
+- **Classification Head**:  
+  - Dropout layer (p=0.1)  
+  - Dense layer mapping `[CLS]` token embedding + POS embedding to cluster logits  
+
+### POS-Tag Augmentation
+
+1. **POS Tagging**: Use spaCy to assign universal POS tags to each token.  
+2. **Embedding Layer**: Learnable POS embedding (size 32) concatenated to BERT’s `[CLS]` representation before classification.
