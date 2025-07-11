@@ -13,17 +13,11 @@ A transformer-based WSD system that clusters WordNet senses into coarse‐graine
   - [Sense Clustering](#sense-clustering)  
   - [Model Architecture](#model-architecture)  
   - [POS-Tag Augmentation](#pos-tag-augmentation)  
-- [Installation](#installation)  
-- [Usage](#usage)  
-- [Results](#results)  
-- [Directory Structure](#directory-structure)  
-- [References](#references)  
-
 ---
 
 ## Project Overview
 
-This repository implements a **coarse-grained Word Sense Disambiguation** system for the NLP2023 shared task. By grouping fine-grained WordNet synsets into broader homonymy clusters, and by enriching a pre-trained BERT model with POS-tag embeddings, we achieve robust disambiguation performance on ambiguous English words.
+This repository implements a **coarse-grained Word Sense Disambiguation** system. By grouping fine-grained WordNet synsets into broader homonymy clusters, and by enriching a pre-trained BERT model with POS-tag embeddings, we achieve robust disambiguation performance on ambiguous English words.
 
 ## Objectives
 
@@ -36,7 +30,7 @@ This repository implements a **coarse-grained Word Sense Disambiguation** system
 
 ## Dataset
 
-- **NLP2023 WSD Task Dataset**  
+- **WSD Task Dataset**  
   - English sentences annotated with WordNet sense keys.  
   - Train / Validation / Test splits provided by the shared task organizers.  
 - **WordNet 3.0**  
@@ -52,9 +46,9 @@ This repository implements a **coarse-grained Word Sense Disambiguation** system
 
 ### Model Architecture
 
-- **Base Encoder**: `bert-base-uncased` from Hugging Face Transformers.  
+- **Base Encoder**: `bert-base-uncased`, `RoBERTa-base` from Hugging Face Transformers.  
 - **Classification Head**:  
-  - Dropout layer (p=0.1)  
+  - Dropout layer
   - Dense layer mapping `[CLS]` token embedding + POS embedding to cluster logits  
 
 ### POS-Tag Augmentation
